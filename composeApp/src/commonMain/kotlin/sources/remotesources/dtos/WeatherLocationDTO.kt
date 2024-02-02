@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-data class WeatherLocation(
+data class WeatherLocationDTO(
     val name: String,
     val region: String,
     val country: String

@@ -1,11 +1,15 @@
 package sources.remotesources.dtos
 
-/**
-* PROJECT : weather
-* DATE    : Fri 02/02/2024
-* TIME    : 14:38
-* USER    : mambo
-*/
+import kotlinx.serialization.Serializable
 
-class WeatherDTO {
-}
+/**
+ * PROJECT : weather
+ * DATE    : Fri 02/02/2024
+ * TIME    : 14:38
+ * USER    : mambo
+ */
+
+@Serializable
+data class WeatherDTO(
+    val condition: WeatherConditionDTO
+)

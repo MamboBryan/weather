@@ -10,18 +10,22 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-data class WeatherCurrentForecastDTO(
+data class WeatherCurrentAndDaysForecastDTO(
+    val current: WeatherCurrentDTO,
+    val forecast: WeatherForecastHolderDTO
+)
+
+@Serializable
+data class WeatherCurrentDTO(
     val last_updated: String,
     val temp_c: Double,
     val temp_f: Double,
     val is_day: Int,
     val condition: WeatherConditionDTO,
-    val wind_kph: Int,
-    val wind_mph: Int,
+    val wind_kph: Double,
+    val wind_mph: Double,
     val humidity: Int,
-    val forecast: WeatherForecastHolderDTO
 )
-
 
 @Serializable
 data class WeatherForecastHolderDTO(val forecastday: List<WeatherDayDTO>)
