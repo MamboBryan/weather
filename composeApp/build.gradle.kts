@@ -43,6 +43,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             // kotlinx serialization(json)
             implementation(libs.kotlinx.serialization.json)
+            // voyager
+            implementation(libs.bundles.voyager)
         }
 
         commonTest.dependencies {
