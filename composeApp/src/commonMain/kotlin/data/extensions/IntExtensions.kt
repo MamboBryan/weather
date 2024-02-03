@@ -1,11 +1,10 @@
 package data.extensions
 
 /**
-* PROJECT : weather
-* DATE    : Sat 03/02/2024
-* TIME    : 01:35
-* USER    : mambo
-*/
+ * PROJECT : weather
+ * DATE    : Sat 03/02/2024
+ * TIME    : 01:35
+ * USER    : mambo
+ */
 
-class IntExtensions {
-}
+fun Int.asBoolean() = this == 1

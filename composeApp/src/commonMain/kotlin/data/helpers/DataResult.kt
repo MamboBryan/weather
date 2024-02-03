@@ -1,4 +1,4 @@
-package data.helper
+package data.helpers
 
 /**
  * PROJECT : weather

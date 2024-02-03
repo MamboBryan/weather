@@ -1,7 +1,7 @@
-package data
+package data.repositories
 
-import data.helper.DataResult
-import data.models.WeatherData
+import data.helpers.DataResult
+import data.models.WeatherForecastData
 
 /**
  * PROJECT : weather
@@ -15,6 +15,10 @@ import data.models.WeatherData
  */
 interface WeatherRepository {
 
-    suspend fun getCurrentWeatherData(): DataResult<List<WeatherData>>
+    /**
+     * Get today's and the next 7 days weather data
+     * @return [DataResult] of [List] of [WeatherForecastData]
+     */
+    suspend fun getCurrentWeatherData(): DataResult<List<WeatherForecastData>>
 
 }

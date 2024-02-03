@@ -28,4 +28,4 @@ data class WeatherCurrentDTO(
 )
 
 @Serializable
-data class WeatherForecastHolderDTO(val forecastday: List<WeatherDayDTO>)
+data class WeatherForecastHolderDTO(val forecastday: List<WeatherForecastDTO>)

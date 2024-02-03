@@ -1,7 +1,8 @@
 package data.models
 
+import data.extensions.asLocalDate
 import kotlinx.datetime.LocalDate
-import sources.remotesources.dtos.WeatherCurrentAndDaysForecastDTO
+import sources.remotesources.dtos.WeatherForecastDTO
 
 /**
  * PROJECT : weather
@@ -10,12 +11,14 @@ import sources.remotesources.dtos.WeatherCurrentAndDaysForecastDTO
  * USER    : mambo
  */
 
-data class WeatherData(
+data class WeatherForecastData(
     val date: LocalDate,
     val day: WeatherDayData,
     val hours: List<WeatherHourData>
 )
 
-fun WeatherCurrentAndDaysForecastDTO.fromDTO(): List<WeatherData> {
-    return forecast.forecastday.map { it.fromDTO() }
-}
+fun WeatherForecastDTO.fromDTO() = WeatherForecastData(
+    date = date.asLocalDate(),
+    day = day.fromDTO(),
+    hours = hour.map { it.fromDTO() }
+)

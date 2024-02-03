@@ -1,5 +1,7 @@
 package data.models
 
+import sources.remotesources.dtos.WeatherConditionDTO
+
 /**
  * PROJECT : weather
  * DATE    : Sat 03/02/2024
@@ -7,7 +9,9 @@ package data.models
  * USER    : mambo
  */
 
-data class WeatherCondition(
+data class WeatherConditionData(
     val label: String,
     val iconUrl: String
 )
+
+fun WeatherConditionDTO.fromDTO() = WeatherConditionData(label = text, iconUrl = icon)

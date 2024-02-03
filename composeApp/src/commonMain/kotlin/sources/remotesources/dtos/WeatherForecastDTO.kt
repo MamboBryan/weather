@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
  * Weather data for the whole day with hour to hour stats
  */
 @Serializable
-data class WeatherDayDTO(
+data class WeatherForecastDTO(
     val date: String,
     val day: WeatherForecastDayDTO,
     val hour: List<WeatherForecastHourDTO>
@@ -24,6 +24,24 @@ data class WeatherDayDTO(
  */
 @Serializable
 data class WeatherForecastDayDTO(
+    val avghumidity: Double,
+    val avgtemp_c: Double,
+    val avgtemp_f: Double,
+    val avgvis_km: Double,
+    val avgvis_miles: Double,
+    val daily_chance_of_rain: Double,
+    val daily_chance_of_snow: Double,
+    val daily_will_it_rain: Int,
+    val daily_will_it_snow: Int,
+    val maxtemp_c: Double,
+    val maxtemp_f: Double,
+    val maxwind_kph: Double,
+    val maxwind_mph: Double,
+    val mintemp_c: Double,
+    val mintemp_f: Double,
+    val totalprecip_in: Double,
+    val totalprecip_mm: Double,
+    val totalsnow_cm: Double,
     val condition: WeatherConditionDTO
 )
 
@@ -41,34 +59,4 @@ data class WeatherForecastHourDTO(
     val wind_mph: Double,
     val humidity: Double,
     val will_it_rain: Int,
-)
-
-
-data class DayDTO(
-    val avghumidity: Int,
-    val avgtemp_c: Double,
-    val avgtemp_f: Double,
-    val avgvis_km: Int,
-    val avgvis_miles: Int,
-    val condition: Condition,
-    val daily_chance_of_rain: Int,
-    val daily_chance_of_snow: Int,
-    val daily_will_it_rain: Int,
-    val daily_will_it_snow: Int,
-    val maxtemp_c: Double,
-    val maxtemp_f: Double,
-    val maxwind_kph: Double,
-    val maxwind_mph: Double,
-    val mintemp_c: Double,
-    val mintemp_f: Int,
-    val totalprecip_in: Int,
-    val totalprecip_mm: Double,
-    val totalsnow_cm: Int,
-    val uv: Int
-)
-
-data class Condition(
-    val code: Int,
-    val icon: String,
-    val text: String
 )
