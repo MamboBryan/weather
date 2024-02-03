@@ -20,6 +20,9 @@ import kotlin.test.assertTrue
  * USER    : mambo
  */
 
+/**
+ * A fake of [WeatherRepository] to use for testing
+ */
 class FakeWeatherRepository : WeatherRepository {
 
     private val data: MutableStateFlow<List<WeatherForecastData>?> = MutableStateFlow(emptyList())
