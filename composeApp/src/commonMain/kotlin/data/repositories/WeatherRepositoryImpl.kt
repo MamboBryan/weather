@@ -35,8 +35,8 @@ class WeatherRepositoryImpl(private val remoteSource: WeatherRemoteSource) : Wea
     }
 
     override suspend fun getPastWeatherData(
-        start: LocalDate,
-        end: LocalDate
+        startDate: LocalDate,
+        endDate: LocalDate
     ): DataResult<List<WeatherForecastData>> {
         val result = remoteSource.fetchPastWeatherDates(
             city = "berlin",

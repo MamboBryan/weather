@@ -68,8 +68,8 @@ class FakeWeatherRepository : WeatherRepository {
     }
 
     override suspend fun getPastWeatherData(
-        start: LocalDate,
-        end: LocalDate
+        startDate: LocalDate,
+        endDate: LocalDate
     ): DataResult<List<WeatherForecastData>> {
         return when (val result = data.value) {
             null -> DataResult.Error(message = "error")
@@ -122,8 +122,8 @@ class WeatherRepositoryTest {
         runTest {
             repository.simulateSuccess()
             val data = repository.getPastWeatherData(
-                start = today,
-                end = today.minus(period = DatePeriod(days = 16))
+                startDate = today,
+                endDate = today.minus(period = DatePeriod(days = 16))
             )
             assertTrue { data is DataResult.Success }
             val list = (data as DataResult.Success).data
@@ -135,8 +135,8 @@ class WeatherRepositoryTest {
         runTest {
             repository.simulateSuccess()
             val data = repository.getPastWeatherData(
-                start = today,
-                end = today.minus(period = DatePeriod(days = 20))
+                startDate = today,
+                endDate = today.minus(period = DatePeriod(days = 20))
             )
             assertTrue { data is DataResult.Success }
             val weather = (data as DataResult.Success).data.first()

@@ -24,10 +24,10 @@ interface WeatherRepository {
 
     /**
      * Get past weather events within a certain date range
-     * @param [start] the start date to search range
-     * @param [end] the end date for the search range
+     * @param [startDate] the start date to search range
+     * @param [endDate] the end date for the search range
      * @return [DataResult] of [List] of [WeatherForecastData]
      */
-    suspend fun getPastWeatherData(start: LocalDate, end: LocalDate): DataResult<List<WeatherForecastData>>
+    suspend fun getPastWeatherData(startDate: LocalDate, endDate: LocalDate): DataResult<List<WeatherForecastData>>
 
 }
