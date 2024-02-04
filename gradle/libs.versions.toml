@@ -21,12 +21,13 @@ ktor = "2.3.8"
 kotlinx-coroutines = "1.7.3"
 kotlinx-serialization = "1.6.0"
 kotlinx-datetime = "0.5.0"
+
 # Other
 voyager = "1.0.0"
+koin = "3.4.3"
+coil = "2.2.2"
 
 [libraries]
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
@@ -39,6 +40,9 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 
 # kotlin
+# testing
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 # serialization
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 # datetime
@@ -62,9 +66,18 @@ voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", vers
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 
+# koin
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+
+# coil
+coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
 [bundles]
 voyager = ["voyager-navigator", "voyager-screenModel", "voyager-transitions", "voyager-koin"]
-ktor = [ "ktor-core", "ktor-content-negotiation", "ktor-logging", "ktor-serialization", "ktor-json"]
+ktor = ["ktor-core", "ktor-content-negotiation", "ktor-logging", "ktor-serialization", "ktor-json"]
+coil = ["coil-kt", "coil-kt-compose"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

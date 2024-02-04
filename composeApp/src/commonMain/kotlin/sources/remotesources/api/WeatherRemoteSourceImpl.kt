@@ -18,7 +18,7 @@ import sources.remotesources.helpers.safeApiCall
 
 class WeatherRemoteSourceImpl(private val client: HttpClient) : WeatherRemoteSource {
 
-    private val key = "ADD KEY HERE"
+    private val key = "4547cb951914443bae4104513240102"
 
     data class Query(val name: String, val value: String)
 
@@ -51,7 +51,7 @@ class WeatherRemoteSourceImpl(private val client: HttpClient) : WeatherRemoteSou
                 endpoint = Endpoint.Forecast,
                 queries = listOf(
                     Query(name = "key", value = key),
-                    Query(name = "city", value = city),
+                    Query(name = "q", value = city),
                     Query(name = "aqi", value = isAirQualityEnabled.toQueryParameter()),
                     Query(name = "alerts", value = isAlertsEnabled.toQueryParameter()),
                 )

@@ -34,7 +34,7 @@ sealed class Endpoint(private val route: String) {
      */
     val url: String
         get() = buildString {
-            append("http://api.weatherapi.com/v1")
+            append("https://api.weatherapi.com/v1")
             append(route)
         }
 

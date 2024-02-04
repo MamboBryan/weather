@@ -45,6 +45,10 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             // voyager
             implementation(libs.bundles.voyager)
+            // koin
+            implementation(libs.koin.core)
+            // coil
+//            implementation(libs.bundles.coil)
         }
 
         commonTest.dependencies {
@@ -54,6 +58,8 @@ kotlin {
             implementation(libs.ktor.client.mock)
             // kotlin - coroutines
             implementation(libs.kotlinx.coroutines.test)
+            // koin
+            implementation(libs.koin.test)
         }
 
         androidMain.dependencies {
