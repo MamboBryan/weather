@@ -43,4 +43,9 @@ sealed class Endpoint(private val route: String) {
      */
     data object Forecast : Endpoint(route = "/forecast.json")
 
+    /**
+     * Endpoint object for getting past weather forecast data
+     */
+    data object History : Endpoint(route = "/history.json")
+
 }

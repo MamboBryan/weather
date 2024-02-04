@@ -1,10 +1,13 @@
 package sources.remotesources.api
 
+import data.extensions.asYYYYMMDD
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.url
+import kotlinx.datetime.LocalDate
 import sources.remotesources.dtos.WeatherCurrentAndDaysForecastDTO
+import sources.remotesources.dtos.WeatherHistoryDTO
 import sources.remotesources.helpers.Endpoint
 import sources.remotesources.helpers.NetworkResult
 import sources.remotesources.helpers.safeApiCall
@@ -54,6 +57,28 @@ class WeatherRemoteSourceImpl(private val client: HttpClient) : WeatherRemoteSou
                     Query(name = "q", value = city),
                     Query(name = "aqi", value = isAirQualityEnabled.toQueryParameter()),
                     Query(name = "alerts", value = isAlertsEnabled.toQueryParameter()),
+                )
+            )
+        }
+    }
+
+    override suspend fun fetchPastWeatherDates(
+        city: String,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        isAirQualityEnabled: Boolean,
+        isAlertsEnabled: Boolean
+    ): NetworkResult<WeatherHistoryDTO> = safeApiCall(error = "Unable to get past weather data ") {
+        client.get {
+            addUrl(
+                endpoint = Endpoint.History,
+                queries = listOf(
+                    Query(name = "key", value = key),
+                    Query(name = "q", value = city),
+                    Query(name = "aqi", value = isAirQualityEnabled.toQueryParameter()),
+                    Query(name = "alerts", value = isAlertsEnabled.toQueryParameter()),
+                    Query(name = "dt", value = startDate.asYYYYMMDD()),
+                    Query(name = "end_dt", value = endDate.asYYYYMMDD())
                 )
             )
         }

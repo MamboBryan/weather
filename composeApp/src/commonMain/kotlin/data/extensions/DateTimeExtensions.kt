@@ -1,6 +1,8 @@
 package data.extensions
 
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.number
 
 /**
  * PROJECT : weather
@@ -10,3 +12,5 @@ import kotlinx.datetime.LocalDateTime
  */
 
 fun LocalDateTime.as24HourTime() = this.toString().takeLast(5)
+
+fun LocalDate.asYYYYMMDD() = "$year-${month.number}-$dayOfMonth"

@@ -1,5 +1,6 @@
 package data.extensions
 
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,9 +24,15 @@ class DateTimeExtensionsTest {
             Triple(15, 15, "15:15"),
             Triple(2, 23, "02:23"),
         ).map {
-            val time = LocalDateTime(2024, 2, 3,  it.first, it.second)
+            val time = LocalDateTime(2024, 2, 3, it.first, it.second)
             assertEquals(expected = it.third, actual = time.as24HourTime())
         }
+    }
+
+    @Test
+    fun `given a valid LocalDate - should return value as YYYYMMDD`() {
+        val date = LocalDate(2024, 1, 1)
+        assertEquals(expected = "2024-1-1", actual = date.asYYYYMMDD())
     }
 
 }
