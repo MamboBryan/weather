@@ -1,5 +1,6 @@
 package data.repositories
 
+import data.extensions.today
 import data.helpers.DataResult
 import data.models.WeatherConditionData
 import data.models.WeatherDayData
@@ -7,8 +8,10 @@ import data.models.WeatherForecastData
 import data.models.WeatherHourData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.minus
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -34,7 +37,7 @@ class FakeWeatherRepository : WeatherRepository {
     fun simulateSuccess() {
         data.value = listOf(
             WeatherForecastData(
-                date = LocalDate(2024, 2, 3),
+                date = LocalDate(2024, 1, 1),
                 day = WeatherDayData(
                     maxTemperatureInCelsius = 35.0,
                     minTemperatureInCelsius = 24.0,
@@ -58,6 +61,16 @@ class FakeWeatherRepository : WeatherRepository {
     }
 
     override suspend fun getCurrentWeatherData(): DataResult<List<WeatherForecastData>> {
+        return when (val result = data.value) {
+            null -> DataResult.Error(message = "error")
+            else -> DataResult.Success(data = result)
+        }
+    }
+
+    override suspend fun getPastWeatherData(
+        start: LocalDate,
+        end: LocalDate
+    ): DataResult<List<WeatherForecastData>> {
         return when (val result = data.value) {
             null -> DataResult.Error(message = "error")
             else -> DataResult.Success(data = result)
@@ -102,5 +115,31 @@ class WeatherRepositoryTest {
             assertTrue { data is DataResult.Success }
             val list = (data as DataResult.Success).data
             assertTrue { list.isNotEmpty() }
+        }
+
+    @Test
+    fun `given WeatherRepository - when fetching past weather data - should not return an empty list`() =
+        runTest {
+            repository.simulateSuccess()
+            val data = repository.getPastWeatherData(
+                start = today,
+                end = today.minus(period = DatePeriod(days = 16))
+            )
+            assertTrue { data is DataResult.Success }
+            val list = (data as DataResult.Success).data
+            assertTrue { list.isNotEmpty() }
+        }
+
+    @Test
+    fun `given WeatherRepository - when fetching past weather data - should return date less than today`() =
+        runTest {
+            repository.simulateSuccess()
+            val data = repository.getPastWeatherData(
+                start = today,
+                end = today.minus(period = DatePeriod(days = 20))
+            )
+            assertTrue { data is DataResult.Success }
+            val weather = (data as DataResult.Success).data.first()
+            assertTrue { weather.date < today }
         }
 }
