@@ -47,6 +47,8 @@ kotlin {
             implementation(libs.bundles.voyager)
             // koin
             implementation(libs.koin.core)
+            // kamel
+            implementation(libs.kamel.image)
         }
 
         commonTest.dependencies {

@@ -68,33 +68,23 @@ class WeatherDetailsScreenModelTest {
         }
 
     @Test
-    fun `given WeatherDetailScreenModel - when navigation to next 7 days - should be true`() =
+    fun `given WeatherDetailScreenModel - when navigation to show more - should be true`() =
         runTest {
-            weatherDetailScreenModel.navigateToNext7Days()
-            val value = weatherDetailScreenModel.state.value.navigateToNext7Days
+            weatherDetailScreenModel.onClickShowMore()
+            val value = weatherDetailScreenModel.state.value.navigateToShowMore
             assertTrue { value }
         }
 
-    @Test
-    fun `given WeatherDetailScreenModel - when navigation to last 14 days - should be true`() =
-        runTest {
-            weatherDetailScreenModel.navigateToLast14Days()
-            val value = weatherDetailScreenModel.state.value.navigateToLast14Days
-            assertTrue { value }
-        }
 
     @Test
     fun `given WeatherDetailScreenModel - when resetting navigation - should all be false`() =
         runTest {
-            weatherDetailScreenModel.navigateToNext7Days()
-            weatherDetailScreenModel.navigateToLast14Days()
+            weatherDetailScreenModel.onClickShowMore()
             val value = weatherDetailScreenModel.state.value
-            assertTrue { value.navigateToNext7Days }
-            assertTrue { value.navigateToLast14Days }
+            assertTrue { value.navigateToShowMore }
             weatherDetailScreenModel.resetNavigation()
             val updatedValue = weatherDetailScreenModel.state.value
-            assertFalse { updatedValue.navigateToNext7Days }
-            assertFalse { updatedValue.navigateToLast14Days }
+            assertFalse { updatedValue.navigateToShowMore }
         }
 
 }

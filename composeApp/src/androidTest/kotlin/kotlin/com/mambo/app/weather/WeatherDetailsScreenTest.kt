@@ -1,4 +1,4 @@
-package kotlin.com.mambo.app.weather
+package com.mambo.app.weather
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
@@ -30,6 +30,28 @@ class WeatherDetailsScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    private val data = WeatherForecastData(
+        date = LocalDate(2024, 2, 3),
+        day = WeatherDayData(
+            maxTemperatureInCelsius = 35.0,
+            minTemperatureInCelsius = 24.0,
+            averageTemperatureInCelsius = 29.5,
+            averageHumidity = 24.0,
+            maxWindInKilometersPerHour = 40.0,
+            willRain = false,
+            chancesOfRainInPercentage = 25.0,
+            condition = WeatherConditionData("Sunny", "")
+        ),
+        hours = listOf(
+            WeatherHourData(
+                time = LocalDateTime(2024, 2, 3, 6, 30, 0, 0),
+                temperatureInCelsius = 25.0,
+                isDaylight = true,
+                condition = WeatherConditionData("Sunny", "")
+            )
+        )
+    )
+
     @Test
     fun shouldShowLoadingOnInitialization() {
         composeTestRule.setContent {
@@ -37,8 +59,7 @@ class WeatherDetailsScreenTest {
                 WeatherDetailScreenContent(
                     state = WeatherDetailScreenState(),
                     onClickRetry = {},
-                    onClickNavigateToLast14Days = {},
-                    onClickNavigateToNext7Days = {}
+                    onClickShowMore = {},
                 )
             }
         }
@@ -53,8 +74,7 @@ class WeatherDetailsScreenTest {
                 WeatherDetailScreenContent(
                     state = WeatherDetailScreenState(weatherData = LoadState.Error(message = message)),
                     onClickRetry = {},
-                    onClickNavigateToLast14Days = {},
-                    onClickNavigateToNext7Days = {}
+                    onClickShowMore = {},
                 )
             }
         }
@@ -65,39 +85,31 @@ class WeatherDetailsScreenTest {
 
     @Test
     fun whenSuccessfulShouldShowSuccessComposableData() {
-        val data = WeatherForecastData(
-            date = LocalDate(2024, 2, 3),
-            day = WeatherDayData(
-                maxTemperatureInCelsius = 35.0,
-                minTemperatureInCelsius = 24.0,
-                averageTemperatureInCelsius = 29.5,
-                averageHumidity = 24.0,
-                maxWindInKilometersPerHour = 40.0,
-                willRain = false,
-                chancesOfRainInPercentage = 25.0,
-                condition = WeatherConditionData("Sunny", "")
-            ),
-            hours = listOf(
-                WeatherHourData(
-                    time = LocalDateTime(2024, 2, 3, 6, 30, 0, 0),
-                    temperatureInCelsius = 25.0,
-                    isDaylight = true,
-                    condition = WeatherConditionData("Sunny", "")
-                )
-            )
-        )
         composeTestRule.setContent {
             MaterialTheme {
                 WeatherDetailScreenContent(
                     state = WeatherDetailScreenState(weatherData = LoadState.Success(data = data)),
                     onClickRetry = {},
-                    onClickNavigateToLast14Days = {},
-                    onClickNavigateToNext7Days = {}
+                    onClickShowMore = {},
                 )
             }
         }
         composeTestRule.onNodeWithTag(WeatherDetailScreen.Tags.Success).assertIsDisplayed()
         composeTestRule.onNodeWithText(data.day.condition.label).assertIsDisplayed()
+    }
+
+    @Test
+    fun whenSuccessfulShouldShowMoreButton() {
+        composeTestRule.setContent {
+            MaterialTheme {
+                WeatherDetailScreenContent(
+                    state = WeatherDetailScreenState(weatherData = LoadState.Success(data = data)),
+                    onClickRetry = {},
+                    onClickShowMore = {},
+                )
+            }
+        }
+        composeTestRule.onNodeWithTag(WeatherDetailScreen.Tags.ShowMore).assertIsDisplayed()
     }
 
 }

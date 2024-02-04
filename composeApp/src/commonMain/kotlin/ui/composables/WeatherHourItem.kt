@@ -1,17 +1,17 @@
 package ui.composables
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.BaselineShift
@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.extensions.as24HourTime
 import data.models.WeatherHourData
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
 /**
  * PROJECT : weather
@@ -49,14 +51,23 @@ fun WeatherHourItem(
                 ) {
                     append("o")
                 }
+                append("C")
             }
         )
         Column(
             modifier = Modifier.size(50.dp)
                 .padding(vertical = 8.dp)
                 .clip(RoundedCornerShape(25))
-                .background(MaterialTheme.colors.primary)
-        ) { }
+        ) {
+            val painter =
+                asyncPainterResource(data = "https:" + item.condition.iconUrl)
+            KamelImage(
+                modifier = Modifier.fillMaxSize(),
+                resource = painter,
+                contentScale = ContentScale.Fit,
+                contentDescription = "Profile",
+            )
+        }
         Text(text = item.time.as24HourTime())
     }
 }

@@ -13,32 +13,37 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import ui.composables.CenteredColumn
 import ui.composables.CircularProgressBar
-import ui.composables.LeftIconWithText
-import ui.composables.RightIconWithText
 import ui.composables.WeatherHourItem
 import ui.composables.WeatherInfoItem
 import ui.helpers.LoadState
@@ -53,10 +58,11 @@ import ui.helpers.LoadState
 object WeatherDetailScreen : Screen {
 
     data object Tags {
-        val Loading = "WeatherDetail.Loading"
-        val Error = "WeatherDetail.Error"
-        val ErrorMessage = "WeatherDetail.Error.Message"
-        val Success = "WeatherDetail.Success"
+        const val Loading = "WeatherDetail.Loading"
+        const val Error = "WeatherDetail.Error"
+        const val ErrorMessage = "WeatherDetail.Error.Message"
+        const val Success = "WeatherDetail.Success"
+        const val ShowMore = "WeatherDetail.ShowMore"
     }
 
     @Composable
@@ -73,8 +79,7 @@ object WeatherDetailScreen : Screen {
         WeatherDetailScreenContent(
             state = state,
             onClickRetry = screenModel::getCurrentWeatherForecast,
-            onClickNavigateToNext7Days = screenModel::navigateToNext7Days,
-            onClickNavigateToLast14Days = screenModel::navigateToLast14Days
+            onClickShowMore = screenModel::onClickShowMore,
         )
     }
 }
@@ -83,8 +88,7 @@ object WeatherDetailScreen : Screen {
 fun WeatherDetailScreenContent(
     state: WeatherDetailScreenState,
     onClickRetry: () -> Unit,
-    onClickNavigateToNext7Days: () -> Unit,
-    onClickNavigateToLast14Days: () -> Unit
+    onClickShowMore: () -> Unit,
 ) {
     Scaffold { padding ->
         Column(modifier = Modifier.padding(padding).fillMaxSize()) {
@@ -140,20 +144,38 @@ fun WeatherDetailScreenContent(
                             CenteredColumn(
                                 modifier = Modifier.testTag(WeatherDetailScreen.Tags.Success)
                                     .fillMaxSize()
-                                    .padding(16.dp)
                             ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Card(
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .weight(1f)
+                                            .size(200.dp)
                                             .padding(16.dp),
-                                        backgroundColor = MaterialTheme.colors.primary
-                                    ) { }
+                                        elevation = 0.dp
+                                    ) {
+                                        val painter =
+                                            asyncPainterResource(data = "https:" + result.day.condition.iconUrl)
+                                        KamelImage(
+                                            modifier = Modifier.fillMaxSize(),
+                                            resource = painter,
+                                            contentScale = ContentScale.Crop,
+                                            contentDescription = "Profile",
+                                        )
+                                    }
                                     Text(
-                                        text = "${result.day.averageTemperatureInCelsius}",
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 80.sp
+                                        fontSize = 80.sp,
+                                        text = buildAnnotatedString {
+                                            append("${result.day.averageTemperatureInCelsius}")
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontSize = 48.sp,
+                                                    baselineShift = BaselineShift.Superscript
+                                                )
+                                            ) {
+                                                append("o")
+                                            }
+                                            append("C")
+                                        }
                                     )
                                     Text(
                                         text = result.day.condition.label,
@@ -162,7 +184,7 @@ fun WeatherDetailScreenContent(
                                     )
                                 }
                                 Row(
-                                    modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+                                    modifier = Modifier.fillMaxWidth().padding(24.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     WeatherInfoItem(
@@ -183,7 +205,7 @@ fun WeatherDetailScreenContent(
                                 }
                                 Divider(
                                     modifier = Modifier.fillMaxWidth(),
-                                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.25f)
+                                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.1f)
                                 )
                                 LazyRow {
                                     items(result.hours) { hour ->
@@ -204,18 +226,20 @@ fun WeatherDetailScreenContent(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    LeftIconWithText(
-                        text = "Last Week",
-                        icon = Icons.Rounded.ArrowBack,
-                        onClick = onClickNavigateToLast14Days
-                    )
-                    RightIconWithText(
-                        text = "Next Week",
-                        icon = Icons.Rounded.ArrowForward,
-                        onClick = onClickNavigateToNext7Days
-                    )
+
+                    TextButton(
+                        modifier = Modifier.testTag(WeatherDetailScreen.Tags.ShowMore),
+                        onClick = onClickShowMore
+                    ) {
+                        Text(text = "Show More")
+                        Icon(
+                            imageVector = Icons.Rounded.KeyboardArrowRight,
+                            contentDescription = null
+                        )
+                    }
+
                 }
             }
         }

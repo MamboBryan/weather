@@ -27,6 +27,7 @@ uiTestJunit4 = "1.2.0-alpha01-dev620"
 voyager = "1.0.0"
 koin = "3.4.3"
 coil = "2.2.2"
+kamel = "0.9.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -75,14 +76,12 @@ voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voy
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 
-# coil
-coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+# others
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
 [bundles]
 voyager = ["voyager-navigator", "voyager-screenModel", "voyager-transitions", "voyager-koin"]
 ktor = ["ktor-core", "ktor-content-negotiation", "ktor-logging", "ktor-serialization", "ktor-json"]
-coil = ["coil-kt", "coil-kt-compose"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
