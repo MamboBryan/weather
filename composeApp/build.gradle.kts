@@ -47,8 +47,6 @@ kotlin {
             implementation(libs.bundles.voyager)
             // koin
             implementation(libs.koin.core)
-            // coil
-//            implementation(libs.bundles.coil)
         }
 
         commonTest.dependencies {
@@ -68,6 +66,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             // ktor
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.compose.ui.test.junit4)
         }
 
         iosMain.dependencies {
@@ -91,6 +90,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
     packaging {
         resources {
@@ -108,6 +109,7 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+        debugImplementation(libs.compose.ui.test.manifest)
     }
 }
 

@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +51,14 @@ import ui.helpers.LoadState
  */
 
 object WeatherDetailScreen : Screen {
+
+    data object Tags {
+        val Loading = "WeatherDetail.Loading"
+        val Error = "WeatherDetail.Error"
+        val ErrorMessage = "WeatherDetail.Error.Message"
+        val Success = "WeatherDetail.Success"
+    }
+
     @Composable
     override fun Content() {
 
@@ -93,7 +102,10 @@ fun WeatherDetailScreenContent(
                 AnimatedContent(targetState = state.weatherData) { value ->
                     when (value) {
                         LoadState.Loading -> {
-                            CenteredColumn(modifier = Modifier.fillMaxSize()) {
+                            CenteredColumn(
+                                modifier = Modifier.fillMaxSize()
+                                    .testTag(WeatherDetailScreen.Tags.Loading)
+                            ) {
                                 CircularProgressBar(
                                     modifier = Modifier.size(50.dp),
                                     strokeWidth = 7.dp
@@ -102,10 +114,15 @@ fun WeatherDetailScreenContent(
                         }
 
                         is LoadState.Error -> {
-                            CenteredColumn(modifier = Modifier.fillMaxSize()) {
+                            CenteredColumn(
+                                modifier = Modifier.fillMaxSize()
+                                    .testTag(WeatherDetailScreen.Tags.Error)
+                            ) {
                                 Text(text = "Error", fontWeight = FontWeight.Bold, fontSize = 36.sp)
                                 Text(
-                                    modifier = Modifier.fillMaxWidth(0.6f)
+                                    modifier = Modifier
+                                        .testTag(WeatherDetailScreen.Tags.ErrorMessage)
+                                        .fillMaxWidth(0.6f)
                                         .padding(top = 8.dp, bottom = 24.dp),
                                     text = value.message,
                                     textAlign = TextAlign.Center,
@@ -120,10 +137,17 @@ fun WeatherDetailScreenContent(
 
                         is LoadState.Success -> {
                             val result = value.data
-                            CenteredColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                            CenteredColumn(
+                                modifier = Modifier.testTag(WeatherDetailScreen.Tags.Success)
+                                    .fillMaxSize()
+                                    .padding(16.dp)
+                            ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Card(
-                                        modifier = Modifier.size(400.dp).padding(16.dp),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .weight(1f)
+                                            .padding(16.dp),
                                         backgroundColor = MaterialTheme.colors.primary
                                     ) { }
                                     Text(
