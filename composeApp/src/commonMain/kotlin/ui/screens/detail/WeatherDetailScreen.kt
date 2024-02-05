@@ -2,6 +2,7 @@ package ui.screens.detail
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,11 +43,14 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import ui.composables.CenteredColumn
 import ui.composables.CircularProgressBar
 import ui.composables.WeatherHourItem
 import ui.composables.WeatherInfoItem
 import ui.helpers.LoadState
+import ui.screens.list.WeatherListScreen
 
 /**
  * PROJECT : weather
@@ -76,6 +80,13 @@ object WeatherDetailScreen : Screen {
             screenModel.getCurrentWeatherForecast()
         }
 
+        LaunchedEffect(state.navigateToShowMore) {
+            if (state.navigateToShowMore) {
+                navigator?.push(WeatherListScreen(forecasts = state.forecasts))
+                screenModel.resetNavigation()
+            }
+        }
+
         WeatherDetailScreenContent(
             state = state,
             onClickRetry = screenModel::getCurrentWeatherForecast,
@@ -84,6 +95,7 @@ object WeatherDetailScreen : Screen {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun WeatherDetailScreenContent(
     state: WeatherDetailScreenState,
@@ -92,16 +104,6 @@ fun WeatherDetailScreenContent(
 ) {
     Scaffold { padding ->
         Column(modifier = Modifier.padding(padding).fillMaxSize()) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Nairobi",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 36.sp
-                )
-            }
             Column(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 AnimatedContent(targetState = state.weatherData) { value ->
                     when (value) {
@@ -110,10 +112,17 @@ fun WeatherDetailScreenContent(
                                 modifier = Modifier.fillMaxSize()
                                     .testTag(WeatherDetailScreen.Tags.Loading)
                             ) {
-                                CircularProgressBar(
-                                    modifier = Modifier.size(50.dp),
-                                    strokeWidth = 7.dp
-                                )
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Image(
+                                        modifier = Modifier.size(150.dp).padding(bottom = 16.dp),
+                                        painter = painterResource("images/icon.png"),
+                                        contentDescription = "icon"
+                                    )
+                                    CircularProgressBar(
+                                        modifier = Modifier.size(50.dp),
+                                        strokeWidth = 7.dp
+                                    )
+                                }
                             }
                         }
 
@@ -146,6 +155,32 @@ fun WeatherDetailScreenContent(
                                     .fillMaxSize()
                             ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Column(
+                                        modifier = Modifier,
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = "Berlin",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 36.sp
+                                        )
+                                        Text(
+                                            text = buildString {
+                                                append(
+                                                    result.date.dayOfWeek.name.lowercase()
+                                                        .replaceFirstChar { it.uppercase() }
+                                                )
+                                                append(",")
+                                                append(result.date.dayOfMonth)
+                                                append(" ")
+                                                append(
+                                                    result.date.month.name.lowercase()
+                                                        .replaceFirstChar { it.uppercase() }
+                                                )
+                                            }
+                                        )
+                                    }
                                     Card(
                                         modifier = Modifier
                                             .size(200.dp)
@@ -165,7 +200,7 @@ fun WeatherDetailScreenContent(
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 80.sp,
                                         text = buildAnnotatedString {
-                                            append("${result.day.averageTemperatureInCelsius}")
+                                            append("${result.day.averageTemperatureInCelsius.toInt()}")
                                             withStyle(
                                                 style = SpanStyle(
                                                     fontSize = 48.sp,

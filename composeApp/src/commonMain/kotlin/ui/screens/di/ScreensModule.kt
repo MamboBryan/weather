@@ -2,6 +2,7 @@ package ui.screens.di
 
 import org.koin.dsl.module
 import ui.screens.detail.WeatherDetailScreenModel
+import ui.screens.list.WeatherListScreenModel
 
 /**
  * PROJECT : weather
@@ -12,4 +13,5 @@ import ui.screens.detail.WeatherDetailScreenModel
 
 val screenModelModule = module {
     factory { WeatherDetailScreenModel(getCurrentWeatherDataUseCase = get()) }
+    factory { WeatherListScreenModel(getHistoryWeatherDataUseCase = get()) }
 }

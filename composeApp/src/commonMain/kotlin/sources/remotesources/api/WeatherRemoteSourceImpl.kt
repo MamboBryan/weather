@@ -38,6 +38,9 @@ class WeatherRemoteSourceImpl(private val client: HttpClient) : WeatherRemoteSou
         )
     }
 
+    /**
+     * Changes boolean value to valid request query parameter
+     */
     private fun Boolean.toQueryParameter() = when (this) {
         true -> "yes"
         false -> "no"
@@ -55,6 +58,7 @@ class WeatherRemoteSourceImpl(private val client: HttpClient) : WeatherRemoteSou
                 queries = listOf(
                     Query(name = "key", value = key),
                     Query(name = "q", value = city),
+                    Query(name = "days", value = "$days"),
                     Query(name = "aqi", value = isAirQualityEnabled.toQueryParameter()),
                     Query(name = "alerts", value = isAlertsEnabled.toQueryParameter()),
                 )

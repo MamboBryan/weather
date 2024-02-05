@@ -121,4 +121,5 @@ class WeatherListScreenModelTest {
             val value = (data as LoadState.Success).data
             assertTrue { value.isNotEmpty() }
         }
+
 }

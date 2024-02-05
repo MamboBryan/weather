@@ -1,6 +1,7 @@
 package domain.di
 
 import domain.usecases.GetCurrentWeatherDataUseCase
+import domain.usecases.GetHistoryWeatherDataUseCase
 import org.koin.dsl.module
 
 /**
@@ -12,4 +13,5 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     factory { GetCurrentWeatherDataUseCase(weatherRepository = get()) }
+    factory { GetHistoryWeatherDataUseCase(weatherRepository = get()) }
 }

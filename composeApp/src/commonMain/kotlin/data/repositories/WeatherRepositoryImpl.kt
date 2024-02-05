@@ -1,13 +1,10 @@
 package data.repositories
 
-import data.extensions.today
 import data.helpers.DataResult
 import data.mappers.fromDTO
 import data.models.WeatherForecastData
 import data.models.fromDTO
-import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.minus
 import sources.remotesources.api.WeatherRemoteSource
 import sources.remotesources.helpers.NetworkResult
 
@@ -40,8 +37,8 @@ class WeatherRepositoryImpl(private val remoteSource: WeatherRemoteSource) : Wea
     ): DataResult<List<WeatherForecastData>> {
         val result = remoteSource.fetchPastWeatherDates(
             city = "berlin",
-            startDate = today,
-            endDate = today.minus(period = DatePeriod(days = 14))
+            startDate = startDate,
+            endDate = endDate
         )
         return when (result) {
             is NetworkResult.Error -> DataResult.Error(message = result.message)

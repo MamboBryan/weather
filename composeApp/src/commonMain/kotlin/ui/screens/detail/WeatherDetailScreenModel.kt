@@ -17,6 +17,7 @@ import ui.helpers.StatefulScreenModel
 data class WeatherDetailScreenState(
     val weatherData: LoadState<WeatherForecastData> = LoadState.Loading,
     val navigateToShowMore: Boolean = false,
+    val forecasts: List<WeatherForecastData> = emptyList()
 )
 
 class WeatherDetailScreenModel(
@@ -28,7 +29,12 @@ class WeatherDetailScreenModel(
             updateState { copy(weatherData = LoadState.Loading) }
             when (val result = getCurrentWeatherDataUseCase()) {
                 is DataResult.Error -> updateState { copy(weatherData = LoadState.Error(message = result.message)) }
-                is DataResult.Success -> updateState { copy(weatherData = LoadState.Success(data = result.data.first())) }
+                is DataResult.Success -> updateState {
+                    copy(
+                        forecasts = result.data,
+                        weatherData = LoadState.Success(data = result.data.first())
+                    )
+                }
             }
         }
     }

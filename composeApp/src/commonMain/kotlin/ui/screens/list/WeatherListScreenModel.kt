@@ -20,6 +20,7 @@ import ui.helpers.StatefulScreenModel
 
 data class WeatherListScreenState(
     val historyState: LoadState<List<WeatherForecastData>> = LoadState.Loading,
+    val todayState: LoadState<List<WeatherForecastData>> = LoadState.Loading,
     val futureState: LoadState<List<WeatherForecastData>> = LoadState.Loading
 )
 
@@ -32,21 +33,30 @@ class WeatherListScreenModel(
             updateState { copy(historyState = LoadState.Loading) }
             when (
                 val result = getHistoryWeatherDataUseCase(
-                    startDate = today,
-                    endDate = today.minus(period = DatePeriod(days = 14))
+                    startDate = today.minus(period = DatePeriod(days = 14)),
+                    endDate = today
                 )
             ) {
                 is DataResult.Error -> updateState { copy(historyState = LoadState.Error(message = result.message)) }
                 is DataResult.Success -> {
-                    updateState { copy(historyState = LoadState.Success(data = result.data)) }
+                    val list = result.data.toMutableList()
+                    list.sortBy { it.date }
+                    list.removeLast()
+                    list.reverse()
+                    updateState { copy(historyState = LoadState.Success(data = list)) }
                 }
             }
         }
     }
 
     fun updateFutureList(list: List<WeatherForecastData>) {
+        val futureDates = list.toMutableList()
+        futureDates.removeFirst()
         updateState {
-            copy(futureState = LoadState.Success(data = list))
+            copy(
+                todayState = LoadState.Success(data = listOf(list.first())),
+                futureState = LoadState.Success(data = futureDates),
+            )
         }
     }
 
