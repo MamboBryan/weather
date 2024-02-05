@@ -42,7 +42,7 @@ fun WeatherHourItem(
     ) {
         Text(
             text = buildAnnotatedString {
-                append("${item.temperatureInCelsius}")
+                append("${item.temperatureInCelsius.toInt()}")
                 withStyle(
                     style = SpanStyle(
                         fontSize = 12.sp,

@@ -29,35 +29,34 @@ import kotlin.test.assertTrue
 class FakeWeatherRepository : WeatherRepository {
 
     private val data: MutableStateFlow<List<WeatherForecastData>?> = MutableStateFlow(emptyList())
+    private val fake = WeatherForecastData(
+        date = LocalDate(2024, 1, 1),
+        day = WeatherDayData(
+            maxTemperatureInCelsius = 35.0,
+            minTemperatureInCelsius = 24.0,
+            averageTemperatureInCelsius = 29.5,
+            averageHumidity = 24.0,
+            maxWindInKilometersPerHour = 40.0,
+            willRain = false,
+            chancesOfRainInPercentage = 25.0,
+            condition = WeatherConditionData("Sunny", "")
+        ),
+        hours = listOf(
+            WeatherHourData(
+                time = LocalDateTime(2024, 2, 3, 6, 30, 0, 0),
+                temperatureInCelsius = 25.0,
+                isDaylight = true,
+                condition = WeatherConditionData("Sunny", "")
+            )
+        )
+    )
 
     fun simulateError() {
         data.value = null
     }
 
     fun simulateSuccess() {
-        data.value = listOf(
-            WeatherForecastData(
-                date = LocalDate(2024, 1, 1),
-                day = WeatherDayData(
-                    maxTemperatureInCelsius = 35.0,
-                    minTemperatureInCelsius = 24.0,
-                    averageTemperatureInCelsius = 29.5,
-                    averageHumidity = 24.0,
-                    maxWindInKilometersPerHour = 40.0,
-                    willRain = false,
-                    chancesOfRainInPercentage = 25.0,
-                    condition = WeatherConditionData("Sunny", "")
-                ),
-                hours = listOf(
-                    WeatherHourData(
-                        time = LocalDateTime(2024, 2, 3, 6, 30, 0, 0),
-                        temperatureInCelsius = 25.0,
-                        isDaylight = true,
-                        condition = WeatherConditionData("Sunny", "")
-                    )
-                )
-            )
-        )
+        data.value = listOf(fake, fake)
     }
 
     override suspend fun getCurrentWeatherData(): DataResult<List<WeatherForecastData>> {
@@ -92,7 +91,7 @@ class WeatherRepositoryTest {
     }
 
     @Test
-    fun `given WeatherRepository - when fetching weather data - should return DataResult Error`() =
+    fun `given WeatherRepository - when fetching weather data - on failure should return DataResult Error`() =
         runTest {
             repository.simulateError()
             val data = repository.getCurrentWeatherData()

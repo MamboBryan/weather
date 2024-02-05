@@ -25,6 +25,7 @@ class WeatherDetailScreenModel(
 ) : StatefulScreenModel<WeatherDetailScreenState>(initial = WeatherDetailScreenState()) {
 
     fun getCurrentWeatherForecast() {
+        if (state.value.weatherData !is LoadState.Success)
         screenModelScope.launch {
             updateState { copy(weatherData = LoadState.Loading) }
             when (val result = getCurrentWeatherDataUseCase()) {

@@ -18,6 +18,7 @@ import ui.screens.list.WeatherListScreenModel
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
@@ -79,7 +80,7 @@ class WeatherListScreenModelTest {
     @Test
     fun `given WeatherListScreenModel - when updating futureState - should be ListState Success`() =
         runTest {
-            weatherListScreenModel.updateFutureList(listOf())
+            weatherListScreenModel.updateFutureList(listOf(data))
             val data = weatherListScreenModel.state.value.futureState
             assertTrue { data is LoadState.Success }
         }
@@ -87,10 +88,11 @@ class WeatherListScreenModelTest {
     @Test
     fun `given WeatherListScreenModel - when updating futureState with data - state should contain data`() =
         runTest {
-            weatherListScreenModel.updateFutureList(listOf(data))
-            val data = weatherListScreenModel.state.value.futureState
-            val value = (data as LoadState.Success).data
-            assertTrue { value.isNotEmpty() }
+            val list = listOf(data, data)
+            weatherListScreenModel.updateFutureList(list)
+            val state = weatherListScreenModel.state.value.futureState
+            val value = (state as LoadState.Success).data
+            assertEquals(listOf(data), value)
         }
 
     @Test
