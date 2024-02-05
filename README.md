@@ -137,12 +137,27 @@ The app includes both unit and instrumented tests.
 
 ### Libraries
 
-| Title                                                                    | Description       |
-|:-------------------------------------------------------------------------|:------------------|
-| [Kotlinx-DateTime](https://github.com/Kotlin/kotlinx-datetime)           | date/time library |
-| [Kotlinx-Coroutines](https://github.com/Kotlin/kotlinx.coroutines)       | async programming |
-| [Kotlinx-Serialization](https://github.com/Kotlin/kotlinx.serialization) | serialization     |
-| [Kamel](https://github.com/Kamel-Media/Kamel)                            | image loading     |
-| [Voyager](https://github.com/adrielcafe/voyager)                         | navigation        |
+| Title                                                                    | Description          |
+|:-------------------------------------------------------------------------|:---------------------|
+| [Kotlinx-DateTime](https://github.com/Kotlin/kotlinx-datetime)           | date/time library    |
+| [Kotlinx-Coroutines](https://github.com/Kotlin/kotlinx.coroutines)       | async programming    |
+| [Kotlinx-Serialization](https://github.com/Kotlin/kotlinx.serialization) | serialization        |
+| [Kamel](https://github.com/Kamel-Media/Kamel)                            | image loading        |
+| [Voyager](https://github.com/adrielcafe/voyager)                         | navigation           |
+| [Koin](https://github.com/InsertKoinIO/koin)                             | dependency injection |
 
-  
+## Improvements
+### Layered
+- [ ] Sources
+  - [ ] add a local cache for the weather forecast
+- [ ] Data
+  - [ ] get the current day's weather forecast as a flow
+  - [ ] handle getting data from the remote source and caching it on device
+- [ ] UI
+  - [ ] fix the UX on the dates list screen
+### General
+- [ ] add Air Quality to the details(IMPORTANT!!!)
+- [ ] add setup screen for selecting, country, unit of measurement & language
+- [ ] add check to show if country has snow or not
+- [ ] add ability change selected data
+- [ ] add ability to change time from 24hour to 12 hour
