@@ -115,6 +115,7 @@ The app includes both unit and instrumented tests.
 | <img src="images/testing/ui/models/list.png" width="700" hspace="2" alt="loading" /> |
 
 - screens
+ > Instrumented tests can only run on the JVM so in this app's instance they will run on `androidTest`
 
 |                                   WeatherDetailScreen                                   |
 |:---------------------------------------------------------------------------------------:|
@@ -129,7 +130,7 @@ The app includes both unit and instrumented tests.
 ### Language & Framework
 
 | Title                                                                              | Description                        |
-  |:-----------------------------------------------------------------------------------|:-----------------------------------|
+|:-----------------------------------------------------------------------------------|:-----------------------------------|
 | [Kotlin](https://kotlinlang.org/)                                                  | `fun` programming language         |
 | [KMP - Kotlin Multiplatform](https://www.jetbrains.com/kotlin-multiplatform/)      | cross platform framework           |
 | [CMP - Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/) | declarative UI rendering framework |
